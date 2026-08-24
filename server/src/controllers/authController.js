@@ -8,15 +8,15 @@ const gentoken =(id)=>{
 }
 
 const registerUser = async(req,res)=>{
-          const {name , email , password} = req.body
+          const {name , email , password,role} = req.body
           try {
-            const existUser = User.findOne({email})
+            const existUser = await User.findOne({email})
             if(existUser){
             return res.status(400).json({message : "user already exist"})    
-            
-            const hashPassword = bcrypt.hash(password,10);
-           const newUser= User.create({name , email , password:hashPassword})
-            res.status(200).json({message : "user created"}) 
+            }
+            const hashPassword = await bcrypt.hash(password,10);
+           const newUser=  await User.create({name , email , password:hashPassword,role})
+            res.status(200).json({message : "user created",newUser}) 
             if(newUser){
                 const otp = Math.floor(100000 + Math.random() * 900000).toString();
                 const message = `welcome to the shoppix ${name}  enjoy your shopping , OTP-${otp} `
@@ -29,7 +29,7 @@ const registerUser = async(req,res)=>{
                 token : gentoken(newUser._id),
                })
             }
-        }
+        
        
           } catch (error) {
             res.status(400).json({message : "something error", error}) 
@@ -39,7 +39,7 @@ const registerUser = async(req,res)=>{
 const loginUser =  async(req,res)=>{
     const {email,password} = req.body
     try {
-        const user = User.findOne({email})
+        const user = await User.findOne({email})
         if(user && (await bcrypt.compare(password,user.password))){
             res.json({
                 _id : user._id,
@@ -49,7 +49,7 @@ const loginUser =  async(req,res)=>{
                 toke : gentoken(user._id)
             })
         }
-        else  res.status(400).json({message : "invalid email or password"})
+        else  res.status(400).json({message : "invaliddetails"})
     } catch (error) {
         res.status(400).json({message : "invalid email or password"})
     }
@@ -59,10 +59,7 @@ const getUser = async(req,res)=>{
     try {
       const user = await User.find().select("-password");
       res.json({
-        _id : user._id,
-        name : user.name,
-        email : user.email,
-        role : user.role
+       user
       })
     } catch (error) {
         res.status(500).json({message: "server-error"})
