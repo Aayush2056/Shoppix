@@ -22,19 +22,61 @@ const getProductsById = async(req,res)=>{
 
 const createProduct = async(req,res)=>{
     const {name,description,price,stock,category} = req.body
+    console.log(name , req.file);
     let imageUrl = ''
     try {
         if(req.file) {
             const result = await cloudinary.uploader.upload(req.file.path)
             imageUrl = result.secure_url
         }
-        const product = Product.create({
+        const product = await Product.create({
             name,
             description, price , stock, category , imageUrl
         }) 
         res.status(200).json(product)
     } catch (error) {
-         res.status(400).json("something went wrong")
+       console.log(error);
+         res.status(400).json("somethings went wrong")
     }
 
 }
+const updateProduct = async (req,res) => {
+     try {
+        const {name , description , imageUrl ,category , stock} = req.body
+        const product = await Product.findById(req.params.id)
+        if(product){
+            product.name = name || product.name
+            product.description = description || product.description
+            product.category = category || product.category
+            product.stock = stock || product.stock
+            if(req.file){
+                const result = await cloudinary.uploader.upload(req.file.path)
+                product.imageUrl = result.secure_url
+            }
+            const updatedProduct = await product.save()
+            res.json(updatedProduct)
+        }
+        else {
+            res.status(400).json({message : "product not found"})
+        }
+
+     } catch (error) {
+          res.status(400).json({message : error})
+     }
+}
+
+const deleteProduct = async (req,res) => {
+    
+    try {
+        const product = await Product.findById(req.params.id)
+        if(product){
+            await Product.remove(product)
+            res.json({message : "product deleted"})
+        }
+        else   res.status(400).json({message : "product not found"})
+    } catch (error) {
+          res.status(400).json({message : error})
+    }
+}
+
+export {getProducts , getProductsById ,createProduct, updateProduct,deleteProduct}
