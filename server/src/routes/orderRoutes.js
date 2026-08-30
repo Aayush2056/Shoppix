@@ -6,7 +6,7 @@ import { createOrder, getOrders, myOrders, updateOrderStatus } from "../controll
 const router = express.Router();
 
 router.route("/").post(protect,createOrder).get(protect,getOrders)
-router.route("myOrders").get(protect,myOrders)
+router.route("/myOrders").get(protect,myOrders)
 router.route("/:id/status").put(protect,admin,updateOrderStatus)
 
-export default router
+export default router 

@@ -39,7 +39,7 @@ Thank you for shopping with Shoppix!
 };
 const myOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id }).populate("products.Product");
+    const orders = await Order.find({ user: req.User.id }).populate("products.product").populate("user", "name");
     return res.status(200).json({
       orders
     });
@@ -55,7 +55,7 @@ const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({})
       .populate("user", "name email")
-      .populate("products.Product");
+      .populate("products.product");
 
     return res.status(200).json({
       orders

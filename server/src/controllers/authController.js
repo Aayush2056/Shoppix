@@ -48,7 +48,7 @@ const loginUser =  async(req,res)=>{
                 name : user.name,
                 email : user.email,
                 role : user.role,
-                toke : gentoken(user._id)
+                token : gentoken(user._id)
             })
         }
         else  res.status(400).json({message : "invaliddetails"})

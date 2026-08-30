@@ -7,6 +7,6 @@ import { admin } from "../middlewares/admin.middleware.js";
 router.post("/register",registerUser)
 router.post("/login",loginUser)
 
-router.post("/users",protect,admin,getUser)
+router.get("/users",protect,admin,getUser)
 router.post("/confirmOtp",confirmOtp)
 export default router
