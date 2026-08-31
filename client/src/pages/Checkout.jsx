@@ -74,7 +74,11 @@ const Checkout = () => {
               const saveOrderRes = await axios.post(
                 'http://localhost:3000/api/order',
                 {
-                  items: cartItems,
+             products: cartItems.map(item => ({
+                product: item.productId,
+                quantity: item.qty,
+                price: item.price
+                 })),
                   totalAmount: totalPrice,
                   address,
                   paymentId: response.razorpay_payment_id
@@ -131,7 +135,7 @@ const Checkout = () => {
       const saveOrderRes = await axios.post(
         'http://localhost:3000/api/orders',
         {
-          items: cartItems,
+          products: cartItems,
           totalAmount: totalPrice,
           address,
           paymentId: 'bypass_txn_' + Date.now()
