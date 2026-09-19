@@ -33,7 +33,7 @@ const Register = () => {
       const data = res.data;
 
       alert(
-        'Registration Successful! Please check your email for the Welcome OTP.'
+        'Registration Successful! '
       );
 
       login(data);

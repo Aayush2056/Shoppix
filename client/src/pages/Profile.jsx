@@ -19,7 +19,7 @@ const Profile = () => {
     const fetchMyOrders = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:3000/api/orders/myorders',
+          'http://localhost:3000/api/order/myOrders',
           {
             headers: {
               Authorization: `Bearer ${user.token}`

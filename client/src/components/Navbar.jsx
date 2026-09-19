@@ -14,7 +14,7 @@ const Navbar = () => {
     logout();
     navigate('/login');
   };
-
+   console.log(user);
   return (
     <nav className="navbar">
       <div className="navbar-brand">
@@ -29,7 +29,7 @@ const Navbar = () => {
         {user ? (
           <>
             <li><Link to="/profile">Hi, {user.name}</Link></li>
-            {user.role === 'admin' && <li><Link to="/admin">Admin</Link></li>}
+            {user.role === 'admin' ? <li><Link to="/admin">Admin</Link></li> :  <Link to="/about">Contact</Link>}
             <li><button onClick={handleLogout} className="btn-logout">Logout</button></li>
           </>
         ) : (

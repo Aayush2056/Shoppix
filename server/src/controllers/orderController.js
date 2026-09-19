@@ -39,12 +39,23 @@ Thank you for shopping with Shoppix!
 };
 const myOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.User.id }).populate("products.product").populate("user", "name");
+    console.log("USER ID:", req.User?._id);
+
+    const orders = await Order.find({
+      user: req.User._id
+    })
+      .populate("products.product")
+      .populate("user", "name");
+
+    console.log("ORDERS:", orders);
+
     return res.status(200).json({
       orders
     });
 
   } catch (error) {
+    console.log("ERROR:", error);
+
     return res.status(500).json({
       message: "Failed to fetch orders",
       error: error.message
